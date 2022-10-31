@@ -55,7 +55,23 @@ exports.signIn = async (req, res) => {
 };
 
 // FOR GETTING DATA OF USERS
+
 exports.getUsers = async (req, res) => {
-  let users = await User.find();
-  res.send(users);
-};
+  const {_id} = req.body
+  let users = await User.findById(_id);
+    if(users){
+      res.status(200).json({users, message:"user found"})
+    }
+    else{
+     res.status(404).json({messge:"user not found"})
+    }
+  }
+
+
+
+// exports.getUsers = async (req, res) => {
+//   const {_id} = req.body
+//   let users = await User.findById(_id);
+//   res.send(users)
+//   }
+
