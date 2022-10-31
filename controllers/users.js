@@ -1,6 +1,6 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const JWT = require("jsonwebtoken");
 const SECRET_KEY = "ASSIGNMENT";
 
 // FOR SIGNUP A USER
@@ -20,11 +20,11 @@ exports.signUp = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ email: email, id: result._id }, SECRET_KEY);
+    const token = JWT.sign({ email: email, id: result._id }, SECRET_KEY);
     res.send(201).json({ user: result, token: token });
   } catch (error) {
     console.log(error);
-    res.send(500).json({ message: "something went wrong" });
+    res.sendStatus(500).json({ message: "something went wrong" });
   }
 };
 
@@ -43,12 +43,15 @@ exports.signIn = async (req, res) => {
       return res.status(400).json({ message: "invalid password" });
     }
 
-    const token = jwt.sign(
+    const token = JWT.sign(
       { email: existingUser.email, id: existingUser._id },
       SECRET_KEY
     );
-    res.send(201).json({ user: existingUser, token: token });
-  } catch (error) {}
+    res.send({ user: existingUser, token: token });
+  } catch (error) {
+    console.log(error);
+    
+  }
 };
 
 // FOR GETTING DATA OF USERS
